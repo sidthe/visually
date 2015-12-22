@@ -5,8 +5,6 @@ to retrieve credentials to access the APIs of the relevant platforms
 
 
 from trello import TrelloApi
-import OpenSSL
-import ConfigParser
 
 """this method walks the user through retrieving his trello access credentials,
 such as the Trello API key and the user token"""
