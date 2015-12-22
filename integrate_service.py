@@ -21,8 +21,6 @@ def getTrelloCredentials():
 
         trellotoken = TrelloApi(trelloapikey, trellouserhash)
 
-#        print '\n', trellotoken.boards.get('5633557d6373ae1ca66f048a')
-
         return trelloapikey, trellouserhash
 
 
