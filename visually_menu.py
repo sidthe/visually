@@ -19,8 +19,9 @@ def visuallyMenu():
 
     trellogroup = parser.add_argument_group('Trello Control', 'This argumens allow you to manually operate Trello')
     trellogroup.add_argument('-t-cc', action="store_true", dest='trello_create_card_switch', default=False, help='Manually create new trello cards')
+    trellogroup.add_argument('-t-dub', action="store_true", dest='trello_display_uboard_switch', default=False, help='Manually display boards belonging to user')
+    trellogroup.add_argument('-t-dbl', action="store_true", dest='trello_display_board_list_switch', default=False, help='Manually display lists on a board')
     trellogroup.add_argument('-t-dl', action="store_true", dest='trello_display_list_switch', default=False, help='Manually display cards on a list')
-
     results = parser.parse_args()
 
     if len(sys.argv)==1:
@@ -43,7 +44,15 @@ def visuallyMenu():
 
     if results.trello_display_list_switch==True:
             listid = raw_input('Provide Trello listid: ')
-            trello_module.displayList(listid)
+            trello_module.displayListCards(listid)
+
+    if results.trello_display_uboard_switch==True:
+            username = raw_input('Provide your Trello username: ')
+            trello_module.displayUserBoards(username)
+
+    if results.trello_display_board_list_switch==True:
+            username = raw_input('Provide the Trello board id: ')
+            trello_module.displayBoardLists(username)
 
 if __name__ == '__main__':
     pass

@@ -35,15 +35,29 @@ def createCards(number, boardlistid, cardpattern):
         print 'added card', cardname
 
 
-def displayList(boardlistid):
+def displayListCards(boardlistid):
     trello = buildTrelloToken()
     listcardids = trello.lists.get_card(boardlistid, fields=['id', 'name'])
     print '\nYour list contains the following cards'
     for i in listcardids:
         print json.dumps(i)
 
+def displayBoardLists(boardid):
+    trello = buildTrelloToken()
+    listids = trello.boards.get_list(boardid, fields=['id', 'name'])
+    print '\nYour list contains the following cards'
+    for i in listids:
+        print json.dumps(i)
 
-
+def displayUserBoards(username):
+    trello = buildTrelloToken()
+    memberidraw = trello.members.get(username, fields='id')
+    userid = str(json.dumps(memberidraw))[8:-2]
+    print 'Trello id for user', username, 'is', userid
+    userboards = trello.members.get_board(userid, fields=['id', 'name'])
+    print '\nYour are attached to the following Trello boards'
+    for i in userboards:
+        print json.dumps(i)
 
 
 
