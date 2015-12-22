@@ -1,5 +1,5 @@
 """
-This module creates a configuration file if it does not exist
+This module deals with configuration creation and update
 """
 
 import ConfigParser
