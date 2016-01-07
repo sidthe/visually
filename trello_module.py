@@ -7,7 +7,8 @@ import ConfigParser
 from trello import TrelloApi
 import os.path
 import json
-import pandas
+import csv
+from types import *
 
 def buildTrelloToken():
     if os.path.exists('config.cfg') == False:
@@ -58,6 +59,18 @@ def displayUserBoards(username, verbose):
             print json.dumps(i)
     return userboards
 
+def displayUserCards(username, verbose):
+    trello = buildTrelloToken()
+    memberidraw = trello.members.get(username, fields='id')
+    userid = str(json.dumps(memberidraw))[8:-2]
+    usercards = trello.members.get_card(userid, fields=['idBoard', 'idList', 'id', 'idMembers', 'name' ])
+    if verbose == True:
+        print 'Trello id for user', username, 'is', userid
+        print '\nYour are attached to the following Trello cards'
+        for i in usercards:
+            print json.dumps(i)
+    return usercards
+
 #Create functions
 def createCards(number, boardlistid, cardpattern):
     trello = buildTrelloToken()
@@ -70,14 +83,43 @@ def createCards(number, boardlistid, cardpattern):
 #Generate Trello statistics
 def generateUserStats(username):
     verbose = False
-    userboards = displayUserBoards(username, verbose)
     stats_file = username + '_statistics.csv'
+    usercards = displayUserCards(username, verbose)
 
-    with open(stats_file, 'w') as filename:
-        pd = pandas.DataFrame(userboards)
-        pd.to_csv(stats_file)
-            #wr.writerow(i)
+    if os.path.exists(stats_file) == True:
+        os.remove(stats_file)
+    else:
+        pass
 
+    json_data = []
+    data = None
+    write_header = True
+    item_keys = []
+
+
+    cardcontent = json.dumps(usercards)
+    #print cardcontent
+    data = json.loads(cardcontent)
+
+    with open(stats_file, 'a') as csv_file:
+        writer = csv.writer(csv_file)
+
+        for item in data:
+            item_values = []
+            for key in item:
+                if write_header:
+                    item_keys.append(key)
+
+                value = item.get(key, '')
+                if isinstance(value, StringTypes):
+                    item_values.append(value.encode('utf-8'))
+                else:
+                    item_values.append(value)
+            if write_header:
+                writer.writerow(item_keys)
+                write_header = False
+
+            writer.writerow(item_values)
 
 
 if __name__ == '__main__':

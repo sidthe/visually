@@ -1,0 +1,4 @@
+pyOpenSSL==0.15.1
+pyasn1==0.1.9
+requests==2.9.1
+trello==0.9.1

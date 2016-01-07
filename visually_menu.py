@@ -7,6 +7,12 @@ import sys
 import integrate_service
 import create_config
 import trello_module
+import os.path
+
+def configCheck():
+    if os.path.exists('config.cfg') == False:
+        print "Error: Create a Trello config first with -tc"
+        exit(1)
 
 def visuallyMenu():
 
@@ -20,6 +26,7 @@ def visuallyMenu():
     trellogroup = parser.add_argument_group('Trello Control', 'This argumens allow you to manually operate Trello')
     trellogroup.add_argument('-t-cc', action="store_true", dest='trello_create_card_switch', default=False, help='Create new trello cards')
     trellogroup.add_argument('-t-dub', action="store_true", dest='trello_display_uboard_switch', default=False, help='Display boards belonging to user')
+    trellogroup.add_argument('-t-duc', action="store_true", dest='trello_display_ucard_switch', default=False, help='Display cards belonging to user')
     trellogroup.add_argument('-t-dbl', action="store_true", dest='trello_display_board_list_switch', default=False, help='Display lists on a board')
     trellogroup.add_argument('-t-dlc', action="store_true", dest='trello_display_list_switch', default=False, help='Display cards on a list')
     trellogroup.add_argument('-t-gus', action="store_true", dest='trello_generate_user_stat_switch', default=False, help='Save broad user statistics to a CSV file')
@@ -38,25 +45,34 @@ def visuallyMenu():
         print 'Added Trello parameters to the configuration file'
 
     if results.trello_create_card_switch==True:
+            configCheck()
             listid = raw_input('Provide Trello listid: ')
             nrofcard = int(raw_input('Number of cards to create: '))
             namepattern = raw_input('Provide name pattern (ex:mycard): ')
             trello_module.createCards(nrofcard, listid, namepattern)
 
-
     if results.trello_display_uboard_switch==True:
+            configCheck()
             username = raw_input('Provide your Trello username: ')
             trello_module.displayUserBoards(username, verbose=True)
 
+    if results.trello_display_ucard_switch==True:
+            configCheck()
+            username = raw_input('Provide your Trello username: ')
+            trello_module.displayUserCards(username, verbose=True)
+
     if results.trello_display_board_list_switch==True:
+            configCheck()
             boardid = raw_input('Provide the Trello board id: ')
             trello_module.displayBoardLists(boardid, verbose=True)
 
     if results.trello_display_list_switch==True:
+            configCheck()
             listid = raw_input('Provide Trello listid: ')
             trello_module.displayListCards(listid, verbose=True)
 
     if results.trello_generate_user_stat_switch==True:
+            configCheck()
             username = raw_input('Provide Trello username: ')
             trello_module.generateUserStats(username)
 
