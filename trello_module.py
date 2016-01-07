@@ -63,7 +63,7 @@ def displayUserBoards(username, verbose):
     userboards = trello.members.get_board(userid, fields=['id', 'name', 'dateLastActivity', 'shortUrl'])
     if verbose == True:
         print 'Trello id for user', username, 'is', userid
-        print '\nUser' +username + 'is attached to the following Trello boards'
+        print '\nUser ' + username + ' is attached to the following Trello boards'
         for i in userboards:
             print json.dumps(i)
     return userboards
@@ -75,7 +75,7 @@ def displayUserCards(username, verbose):
     usercards = trello.members.get_card(userid)
     if verbose == True:
         print 'Trello id for user', username, 'is', userid
-        print '\nUser' +username + 'is attached to the following Trello boards'
+        print '\nUser ' + username + ' is attached to the following Trello boards'
         for i in usercards:
             print json.dumps(i)
     return usercards
