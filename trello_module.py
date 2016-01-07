@@ -72,7 +72,7 @@ def displayUserCards(username, verbose):
     trello = buildTrelloToken()
     memberidraw = trello.members.get(username, fields='id')
     userid = str(json.dumps(memberidraw))[8:-2]
-    usercards = trello.members.get_card(userid, fields=['id', 'name', 'dateLastActivity', 'shortUrl'])
+    usercards = trello.members.get_card(userid)
     if verbose == True:
         print 'Trello id for user', username, 'is', userid
         print '\nUser' +username + 'is attached to the following Trello boards'
