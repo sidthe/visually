@@ -27,6 +27,7 @@ def visuallyMenu():
     trellogroup.add_argument('-t-cc', action="store_true", dest='trello_create_card_switch', default=False, help='Create new trello cards')
     trellogroup.add_argument('-t-dub', action="store_true", dest='trello_display_uboard_switch', default=False, help='Display boards belonging to user')
     trellogroup.add_argument('-t-duc', action="store_true", dest='trello_display_ucard_switch', default=False, help='Display cards belonging to user')
+    trellogroup.add_argument('-t-dbc', action="store_true", dest='trello_display_board_cards_switch', default=False, help='Display cards on a board')
     trellogroup.add_argument('-t-dbl', action="store_true", dest='trello_display_board_list_switch', default=False, help='Display lists on a board')
     trellogroup.add_argument('-t-dlc', action="store_true", dest='trello_display_list_switch', default=False, help='Display cards on a list')
     trellogroup.add_argument('-t-gus', action="store_true", dest='trello_generate_user_stat_switch', default=False, help='Save broad user statistics to a CSV file')
@@ -60,6 +61,11 @@ def visuallyMenu():
             configCheck()
             username = raw_input('Provide your Trello username: ')
             trello_module.displayUserCards(username, verbose=True)
+
+    if results.trello_display_board_cards_switch==True:
+            configCheck()
+            boardid = raw_input('Provide the Trello board id: ')
+            trello_module.displayBoardCards(boardid, verbose=True)
 
     if results.trello_display_board_list_switch==True:
             configCheck()

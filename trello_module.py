@@ -31,16 +31,25 @@ def buildTrelloToken():
 #List functions
 def displayListCards(boardlistid, verbose):
     trello = buildTrelloToken()
-    listcardids = trello.lists.get_card(boardlistid, fields=['id', 'name'])
+    listcardids = trello.lists.get_card(boardlistid, fields=['id', 'name', 'dateLastActivity', 'shortUrl'])
     if verbose == True:
         print '\nYour list contains the following cards'
         for i in listcardids:
             print json.dumps(i)
     return listcardids
 
+def displayBoardCards(boardid, verbose):
+    trello = buildTrelloToken()
+    listids = trello.boards.get_card(boardid, fields=['id', 'name', 'dateLastActivity', 'shortUrl'])
+    if verbose == True:
+        print '\nYour board contains the following cards'
+        for i in listids:
+            print json.dumps(i)
+    return listids
+
 def displayBoardLists(boardid, verbose):
     trello = buildTrelloToken()
-    listids = trello.boards.get_list(boardid, fields=['id', 'name'])
+    listids = trello.boards.get_list(boardid, fields=['id', 'name', 'dateLastActivity', 'shortUrl'])
     if verbose == True:
         print '\nYour list contains the following cards'
         for i in listids:
@@ -51,10 +60,10 @@ def displayUserBoards(username, verbose):
     trello = buildTrelloToken()
     memberidraw = trello.members.get(username, fields='id')
     userid = str(json.dumps(memberidraw))[8:-2]
-    userboards = trello.members.get_board(userid, fields=['id', 'name'])
+    userboards = trello.members.get_board(userid, fields=['id', 'name', 'dateLastActivity', 'shortUrl'])
     if verbose == True:
         print 'Trello id for user', username, 'is', userid
-        print '\nYour are attached to the following Trello boards'
+        print '\nUser' +username + 'is attached to the following Trello boards'
         for i in userboards:
             print json.dumps(i)
     return userboards
@@ -63,10 +72,10 @@ def displayUserCards(username, verbose):
     trello = buildTrelloToken()
     memberidraw = trello.members.get(username, fields='id')
     userid = str(json.dumps(memberidraw))[8:-2]
-    usercards = trello.members.get_card(userid, fields=['idBoard', 'idList', 'id', 'idMembers', 'name' ])
+    usercards = trello.members.get_card(userid, fields=['id', 'name', 'dateLastActivity', 'shortUrl'])
     if verbose == True:
         print 'Trello id for user', username, 'is', userid
-        print '\nYour are attached to the following Trello cards'
+        print '\nUser' +username + 'is attached to the following Trello boards'
         for i in usercards:
             print json.dumps(i)
     return usercards
