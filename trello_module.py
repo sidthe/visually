@@ -8,7 +8,13 @@ from trello import TrelloApi
 import os.path
 import json
 import csv
+import db_module
+import sqlite3
 from types import *
+
+
+dbname = 'visually.db'
+
 
 def buildTrelloToken():
     if os.path.exists('config.cfg') == False:
@@ -87,6 +93,26 @@ def createCards(number, boardlistid, cardpattern):
         cardname = cardpattern + str(i)
         trello.lists.new_card(boardlistid, name=cardname)
         print 'added card', cardname
+
+def boardsToDB(username):
+    verbose = False
+    userboards = displayUserBoards(username, verbose)
+
+    if os.path.exists('visually.db') == False:
+        db_module.dbTableCreator()
+    else:
+        pass
+
+    alldata = []
+    for i in userboards:
+        data = i['shortUrl'], i['dateLastActivity'], i['name'], i['id']
+        alldata.append(data)
+
+    conn = sqlite3.connect(dbname)
+    c = conn.cursor()
+    c.executemany('INSERT INTO  trello VALUES (?, ?, ?, ?)', alldata)
+    conn.commit()
+    conn.close()
 
 
 #Generate Trello statistics
